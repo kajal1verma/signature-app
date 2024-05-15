@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signature webApp</title>
+  </head>
+  <style>
+    * {
+      margin: 0px;
+      padding: 0px;
+      box-sizing: border-box;
+    }
+    @media only screen and (max-width: 600px) {
+      body {
+        /* background-color: lightblue; */
+        .navbar{
+          /* border: 1px solid black; */
+          flex-wrap: wrap;
+          /* margin-inline: 2rem; */
+        }
+        .container {
+          /* margin-inline: 2rem; */
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap:0px;
+        }
+        .items {
+          width: 40%;
+        }
+        .my-canvas{
+          /* border: 1px solid black; */
+          /* width: 100%; */
+        }
+        
+        canvas{
+          
+          
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          
+          flex-wrap: wrap;
+          /* border: 1px solid red;
+          margin-inline: 4rem; */
+        }
+        .button{
+          width: 100%;
+          /* border: 1px solid; */
+          height: 6vh;
+          display: flex;
+          justify-content: center;
+align-items: center;
+gap:20px;
+flex-wrap: wrap;
+        }
+
+      }
+    }
+
+    body {
+      width: 100%;
+      background-color: skyblue;
+  height: auto;
+       font-family: cursive;
+    }
+    .navbar{
+    /* background-color: #ff4757; */
+width: 100%;
+height: 8vh;
+text-transform: capitalize;
+color: white;
+display: flex;
+justify-content: center;
+align-items: center;
+    }
+
+    .container {
+      color: white;
+      /* margin-inline: 10rem; */
+flex-wrap: wrap;
+      margin-top: 1.2rem;
+      width: 100%;
+      /* border: 1px solid black; */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* flex-direction: column; */
+      gap:20px;
+    }
+    .items > p {
+      font-size: 1.2rem;
+      text-transform: capitalize;
+    }
+    .items {
+      width: 20%;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+/* border: 1px solid black; */
+    }
+    input {
+      margin-top: 10px;
+      width: 70%;
+    }
+    .items select {
+      margin: 5px;
+      width: 70%;
+    }
+    .items select option {
+    }
+    .my-canvas {
+      /* border: 1px solid black; */
+      /* margin-inline: 10rem; */
+      display: flex;
+      /* width: 50%;
+      height:50vh ; */
+      align-items: center;
+      justify-content: center;
+      margin-block: 1rem;
+    }
+    canvas {
+      border: 1px solid black;
+      background-color: white;
+      z-index: 1000;
+    }
+    .button {
+      width: 100%;
+      height: 1.3rem;
+      /* border: 1px solid black; */
+      display: flex;
+      justify-content: space-evenly;
+    }
+    .button > button {
+      text-transform: capitalize;
+      width: 8rem;
+      height: 2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      /* border: 2px solid white; */
+      background: none;
+      color: white;
+    }
+    #clear {
+      background-color: #ff4757;
+    }
+    #clear:hover{
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 15px;
+    }
+    #save {
+      padding: 5px;
+      background-color: #2ed573;
+      width: 10rem;
+    }
+
+    #save:hover{
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 15px;
+
+    }
+    #retrieve {
+      background-color: #f1c40f;
+    }
+    #retrieve:hover{
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 15px;
+
+    }
+  </style>
+  <body>
+    <div class="nav">
+      <div class="navbar">
+        <h1>make your signature</h1>
+      </div>
+    </div>
+    <div class="header">
+      <div class="container">
+        <div class="items">
+          <p>text color</p>
+          <input type="color" class="text-color" id="color-picker" />
+        </div>
+        <div class="items">
+          <p>background color</p>
+          <input type="color" class="text-color" id="bg-color-picker" />
+        </div>
+        <div class="items">
+          <p>font size</p>
+          <select name="" id="size-picker">
+            <option value="1">1px</option>
+            <option value="2">2px</option>
+            <option value="4">4px</option>
+            <option value="8">8px</option>
+            <option value="12">12px</option>
+            <option value="16">16px</option>
+            <option value="20">20px</option>
+            <option value="24">24px</option>
+            <option value="28">28px</option>
+          </select>
+        </div>
+      </div>
+      <div class="my-canvas">
+        <canvas id="mycanvas" width="400" height="300" ></canvas>
+      </div>
+    </div>
+    <div class="container">
+      <div class="button">
+        <button type="button" id="clear">clear</button>
+        <button id="retrieve">undo</button>
+        <button id="save">save & download</button>
+      </div>
+    </div>
+    <script>
+      
+
+        const color_picker=document.getElementById('color-picker');
+        const bg_color_picker=document.getElementById('bg-color-picker');
+        const font_size_picker=document.getElementById('size-picker');
+        const canvas=document.getElementById('mycanvas');
+        const clearButton=document.getElementById('clear');
+        const save=document.getElementById('save');
+        const retrieve=document.getElementById('retrieve');
+        //  let isDrawing=false;
+        const ctx=canvas.getContext('2d');
+
+        //for color picker
+        color_picker.addEventListener('change',(e)=>{
+            ctx.strokeStyle=e.target.value;
+            ctx.fillStyle=e.target.value;
+        });
+        //after pick color drawing at canvas
+        canvas.addEventListener('mousedown', (e) => {
+             isDrawing = true;
+             lastX = event.offsetX;
+            lastY = event.offsetY;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDrawing){
+              ctx.beginPath();
+              ctx.moveTo(lastX, lastY);
+                ctx.lineTo(event.offsetX, event.offsetY);
+                ctx.stroke();
+
+                lastX = event.offsetX;
+                lastY = event.offsetY;
+            }
+        });
+
+        canvas.addEventListener('mouseup',(e)=>{
+            isDrawing=false;
+        });
+
+        bg_color_picker.addEventListener('change', (event) => {
+            ctx.fillStyle = event.target.value;
+            ctx.fillRect(0, 0, 800, 500);
+        }); 
+       //canvas font size picker
+    font_size_picker.addEventListener('change',(e)=>{
+        ctx.lineWidth=e.target.value;
+    });
+     clearButton.addEventListener('click', () => {
+        ctx.clearRect(0,0, canvas.width, canvas.height);
+        // console.log("hello")
+        })
+    
+    save.addEventListener('click',()=>{
+      localStorage.setItem('canvasContents', canvas.toDataURL());
+
+      let canvasUrl = canvas.toDataURL();
+      const createEl = document.createElement('a');
+      createEl.href = canvasUrl;
+      createEl.download = "download-this-canvas"
+      createEl.click();
+    createEl.remove();
+    });
+    retrieve.addEventListener('click',()=>{
+      let savecanvas=localStorage.getItem('canvasContents')
+      if (savecanvas) {
+                let img = new Image();
+                img.src = savecanvas;
+                ctx.drawImage(img, 0, 0);
+            }
+    })
+    </script>
+  </body>
+</html>
+ 
